@@ -1,11 +1,84 @@
-<!DOCTYPE html>
-<html lang="en">
+<!-- index.html -->
+<!doctype html> 
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Calculadora - Interfaz moderna</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    
+  <div class="calculator">
+    <div class="screen" id="screen">0</div>
+    <div class="keys">
+      <button onclick="appendNumber('1')">1</button>
+      <button onclick="appendNumber('2')">2</button>
+      <button onclick="appendNumber('3')">3</button>
+
+      <button onclick="appendNumber('4')">4</button>
+      <button onclick="appendNumber('5')">5</button>
+      <button onclick="appendNumber('6')">6</button>
+
+      <button onclick="appendNumber('7')">7</button>
+      <button onclick="appendNumber('8')">8</button>
+      <button onclick="appendNumber('9')">9</button>
+
+      <button onclick="appendNumber('0')">0</button>
+      <button onclick="clearScreen()" class="op">C</button>
+      <button onclick="backspace()" class="op">⌫</button>
+
+      <button onclick="appendOp('+')" class="op">+</button>
+      <button onclick="appendOp('-')" class="op">−</button>
+      <button onclick="appendOp('*')" class="op">×</button>
+      <button onclick="appendOp('/')" class="op">÷</button>
+
+      <button onclick="calculate()" class="equal">=</button>
+    </div>
+  </div>
+
+  <script>
+    let expr = '';
+
+    function updateScreen(){
+      document.getElementById('screen').textContent = expr || '0';
+    }
+
+    function appendNumber(num){
+      expr += num;
+      updateScreen();
+    }
+
+    function appendOp(op){
+      if(expr==='' && op!=='-') return;
+      const last = expr.slice(-1);
+      if(['+','-','*','/'].includes(last)){
+        expr = expr.slice(0,-1) + op;
+      } else {
+        expr += op;
+      }
+      updateScreen();
+    }
+
+    function clearScreen(){
+      expr = '';
+      updateScreen();
+    }
+
+    function backspace(){
+      expr = expr.slice(0,-1);
+      updateScreen();
+    }
+
+    function calculate(){
+      try{
+        const result = Function('return ' + expr)();
+        expr = result.toString();
+        updateScreen();
+      }catch{
+        expr = '';
+        updateScreen();
+      }
+    }
+  </script>
 </body>
 </html>
